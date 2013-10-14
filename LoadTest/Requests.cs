@@ -6,9 +6,9 @@
             this.executionPlan = executionPlan;
         }
 
-        public To To(string url) {
+        public TestPlanConfiguration To(string url) {
             executionPlan.SetUrl(url);
-            return new To(executionPlan);
+            return new TestPlanConfiguration(executionPlan);
         }
     }
 }

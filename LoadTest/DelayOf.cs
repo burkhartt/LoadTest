@@ -6,10 +6,10 @@
             this.executionPlan = executionPlan;
         }
 
-        public DelayUnits Milliseconds {
+        public TestPlanConfiguration Milliseconds {
             get {
                 executionPlan.SetDelayMultiplier(1);
-                return new DelayUnits(executionPlan);
+                return new TestPlanConfiguration(executionPlan);
             }
         }
     }

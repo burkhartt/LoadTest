@@ -1,12 +1,17 @@
-﻿using LoadTest;
+﻿using System.Collections.Generic;
+using LoadTest;
 
 namespace LoadTests.Console {
     internal class Program {
         private static void Main(string[] args) {
-            var loadTestConfiguration = new LoadTestConfiguration();
-            var plan = loadTestConfiguration.Send(10).Requests.To("http://www.google.com/")
-                .WithADelayOf(100).Milliseconds.Compile();
-            var results = plan.Execute();
+            var loadTestConfiguration = new TestPlanBuilder();
+            var testPlan = loadTestConfiguration.Send(10).Requests.To("http://www.goaheadtours.com/")
+                .WithMethod(RequestMethod.Get)
+                .WithHeader("some-header", "headerValue")
+                .WithRequestParam("request-param", "paramValue")
+                .WithADelayOf(100).Milliseconds
+                .Build();
+            var results = testPlan.Execute();
         }
     }
 }
