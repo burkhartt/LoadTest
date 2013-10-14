@@ -14,3 +14,8 @@ var plan = testPlanBuilder.Send(10).Requests
     .Build();
 var results = plan.Execute();
 ```
+
+Download on NuGet:
+```
+Install-Package LoadTest
+```
