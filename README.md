@@ -13,6 +13,9 @@ var plan = testPlanBuilder.Send(10).Requests
     .WithADelayOf(100).Milliseconds
     .Build();
 var results = plan.Execute();
+
+var responseTimes = results.ResponseTimes; // IEnumerable<ResponseTime>
+var averageResponseTime = results.AverageResponseTime;
 ```
 
 Download on NuGet:
