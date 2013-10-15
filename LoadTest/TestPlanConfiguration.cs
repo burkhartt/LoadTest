@@ -13,9 +13,9 @@ namespace LoadTest {
             return this;
         }
 
-        public DelayOf WithADelayOf(int delay) {
+        public Delay WithADelayOf(int delay) {
             executionPlan.SetDelay(delay);
-            return new DelayOf(executionPlan);
+            return new Delay(executionPlan);
         }
 
         public ExecutionPlan Build() {
@@ -27,8 +27,8 @@ namespace LoadTest {
             return this;
         }
 
-        public TestPlanConfiguration WithMethod(RequestMethod method) {
-            executionPlan.SetMethod(method);
+        public TestPlanConfiguration WithMethod(HttpVerbs httpVerb) {
+            executionPlan.SetHttpVerb(httpVerb);
             return this;
         }
     }

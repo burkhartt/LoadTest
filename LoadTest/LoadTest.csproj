@@ -39,9 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DelayOf.cs" />
+    <Compile Include="Delay.cs" />
     <Compile Include="LoadRequest.cs" />
-    <Compile Include="RequestMethod.cs" />
+    <Compile Include="HttpVerbs.cs" />
     <Compile Include="TestPlanBuilder.cs" />
     <Compile Include="ExecutionPlan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

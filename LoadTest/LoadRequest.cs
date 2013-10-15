@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -10,23 +8,22 @@ using System.Threading;
 namespace LoadTest {
     public class LoadRequest {
         private readonly NameValueCollection headers;
-        private readonly RequestMethod requestMethod;
+        private readonly HttpVerbs httpVerb;
         private readonly NameValueCollection requestParams;
         private readonly string baseUrl;
 
-        public LoadRequest(string name, string baseUrl, RequestMethod requestMethod, NameValueCollection headers, NameValueCollection requestParams) {
-            Name = name;
+        public LoadRequest(string baseUrl, HttpVerbs httpVerb, NameValueCollection headers, NameValueCollection requestParams) {
             this.baseUrl = baseUrl;
-            this.requestMethod = requestMethod;
+            this.httpVerb = httpVerb;
             this.headers = headers;
             this.requestParams = requestParams;
         }
 
-        public string Name { get; private set; }
         public TimeSpan TimeTaken { get; private set; }
         public bool IsFinished { get; private set; }
-
         public string Url { get { return GetRequestUri(); } }
+        public long RequestContentLength { get; private set; }
+        public long ResponseContentLength { get; private set; }
 
         public void Run() {
             var t = new Thread(ThreadProc);
@@ -36,20 +33,27 @@ namespace LoadTest {
         private void ThreadProc() {
             var requestUri = GetRequestUri();
             var request = WebRequest.Create(requestUri);
+            request.Method = httpVerb.ToString();
             AddRequestParams(request);
             AddHeaders(request);
-            request.Method = requestMethod.ToString();
-
+            RequestContentLength = request.ContentLength;
+            
             var timer = new Stopwatch();
             timer.Start();
-            request.GetResponse().Close();
+            GetResponse(request);
             timer.Stop();
             TimeTaken = timer.Elapsed;
             IsFinished = true;
         }
 
+        private void GetResponse(WebRequest request) {
+            var response = request.GetResponse();
+            ResponseContentLength = response.ContentLength;
+            response.Close();
+        }
+
         private string GetRequestUri() {
-            if (requestMethod != RequestMethod.Get) {
+            if (httpVerb != HttpVerbs.Get) {
                 return baseUrl;
             }
 
@@ -58,7 +62,7 @@ namespace LoadTest {
         }
 
         private void AddRequestParams(WebRequest request) {
-            if (requestMethod == RequestMethod.Get) {
+            if (httpVerb == HttpVerbs.Get) {
                 return;
             }
 

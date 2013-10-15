@@ -14,7 +14,7 @@ namespace LoadTest {
         private string baseUrl;
         private readonly NameValueCollection headers = new NameValueCollection();
         private readonly NameValueCollection requestParams = new NameValueCollection();
-        private RequestMethod requestMethod;
+        private HttpVerbs httpVerb;
 
         public void SetNumberOfRequests(int requests) {
             numberOfRequests = requests;
@@ -40,14 +40,14 @@ namespace LoadTest {
             requestParams.Add(requestParam.Key, requestParam.Value);
         }
 
-        public void SetMethod(RequestMethod method) {
-            requestMethod = method;
+        public void SetHttpVerb(HttpVerbs httpVerb) {
+            this.httpVerb = httpVerb;
         }
 
         public ExecutionResults Execute() {
             var requests = new List<LoadRequest>(numberOfRequests);
             for (var i = 0; i < numberOfRequests; ++i) {
-                var loadRequest = new LoadRequest("Thread-" + i, baseUrl, requestMethod, headers, requestParams);
+                var loadRequest = new LoadRequest(baseUrl, httpVerb, headers, requestParams);
                 loadRequest.Run();
                 requests.Add(loadRequest);
                 Thread.Sleep(delay*delayMultiplier);
@@ -62,8 +62,9 @@ namespace LoadTest {
                 Url = requests.First().Url,
                 Delay = delay*delayMultiplier,
                 ResponseTimes = requests.Select(r => new ResponseTime {
-                    Name = r.Name,
-                    Time = r.TimeTaken
+                    Time = r.TimeTaken,
+                    RequestContentLength = r.RequestContentLength,
+                    ResponseContentLength = r.ResponseContentLength                    
                 }),
                 AverageResponseTime = TimeSpan.FromMilliseconds(requests.Average(x => x.TimeTaken.Milliseconds))
             };
