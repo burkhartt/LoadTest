@@ -27,7 +27,7 @@ namespace LoadTest {
             return this;
         }
 
-        public TestPlanConfiguration WithMethod(HttpVerbs httpVerb) {
+        public TestPlanConfiguration WithHttpVerb(HttpVerbs httpVerb) {
             executionPlan.SetHttpVerb(httpVerb);
             return this;
         }

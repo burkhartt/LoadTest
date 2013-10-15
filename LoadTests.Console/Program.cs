@@ -7,7 +7,7 @@ namespace LoadTests.Console {
             var loadTestConfiguration = new TestPlanBuilder();
             var testPlan = loadTestConfiguration
                 .Send(10).Requests.To("http://www.goaheadtours.com/")
-                .WithMethod(HttpVerbs.Post)
+                .WithHttpVerb(HttpVerbs.Post)
                 .WithHeader("some-header", "headerValue")
                 .WithRequestParam("request-param", "paramValue")
                 .WithADelayOf(100).Milliseconds
